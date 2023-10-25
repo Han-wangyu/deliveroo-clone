@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         gap: 10,
-        marginBottom: 32,
+        // marginBottom: 32,
     },
     toggleActive: {
         backgroundColor: Colors.primary,

@@ -1,8 +1,7 @@
 import {Stack, useNavigation} from 'expo-router';
-import {TouchableOpacity, useColorScheme} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import CustomHeader from "../components/custom-header";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
-import filter from "./(modal)/filter";
 import {Ionicons} from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 

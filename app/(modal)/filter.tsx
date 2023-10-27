@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Colors from "../../constants/Colors";
 import {useNavigation} from "expo-router";
 import {categories} from "../../assets/data/home";
 import {Ionicons} from "@expo/vector-icons";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
+import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
+import AnimatedText from "react-native-reanimated/src/reanimated2/component/Text";
 
 interface Category {
     name: string,
@@ -46,6 +49,22 @@ const ItemBox = () => (
 const Filter = () => {
     const navigation = useNavigation();
     const [items, setItems] = useState<Category[]>(categories);
+    const [selected, setSelected] = useState<Category[]>([]);
+    const flexWidth = useSharedValue(0);
+    const scale = useSharedValue(0);
+
+    useEffect(() => {
+        const hasSelected = selected.length > 0;
+        const selectedItems = items.filter((item) => item.checked);
+        const newSelected = selectedItems.length > 0;
+
+        if (hasSelected !== newSelected) {
+            flexWidth.value = withTiming(newSelected ? 150 : 0);
+            scale.value = withTiming(newSelected ? 1 : 0);
+        }
+
+        setSelected(selectedItems);
+    }, [items]);
 
     const handleClearAll = () => {
         const updatedItems = items.map((item) => {
@@ -54,6 +73,19 @@ const Filter = () => {
         });
         setItems(updatedItems);
     };
+
+    const animatedStyles = useAnimatedStyle(() => {
+        return {
+            width: flexWidth.value,
+            opacity: flexWidth.value > 0 ? 1 : 0,
+        };
+    });
+
+    const animatedText = useAnimatedStyle(() => {
+        return {
+            transform: [ { scale: scale.value } ],
+        };
+    });
 
     const renderItem: ListRenderItem<Category> = ({ item, index }) => (
             <View style={styles.row}>
@@ -87,11 +119,21 @@ const Filter = () => {
             <FlatList data={items} renderItem={renderItem} ListHeaderComponent={<ItemBox />} />
             <View style={ { height: 76 } } />
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.fullButton} onPress={() => { navigation.goBack() }}>
-                    <Text style={styles.footerText}>
-                        Done
-                    </Text>
-                </TouchableOpacity>
+                <View style={styles.btnContainer}>
+                    <AnimatedView style={[animatedStyles, styles.outlineButton]}>
+                        <TouchableOpacity onPress={ handleClearAll }>
+                            <AnimatedText style={[animatedText, styles.outlineButtonText]}>
+                                Clear all
+                            </AnimatedText>
+                        </TouchableOpacity>
+                    </AnimatedView>
+
+                    <TouchableOpacity style={styles.fullButton} onPress={() => { navigation.goBack() }}>
+                        <Text style={styles.footerText}>
+                            Done
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -119,13 +161,14 @@ const styles = StyleSheet.create({
             width: 0,
             height: -10,
         },
-
     },
     fullButton: {
         backgroundColor: Colors.primary,
         padding: 16,
         alignItems: "center",
         borderRadius: 8,
+        flex: 1,
+        height: 56,
     },
     footerText: {
         color: "#fff",
@@ -160,6 +203,24 @@ const styles = StyleSheet.create({
     },
     itemText: {
          flex: 1,
+    },
+    btnContainer: {
+        flexDirection: "row",
+        gap: 12,
+        justifyContent: "center",
+    },
+    outlineButton: {
+        borderColor: Colors.primary,
+        borderWidth: 0.5,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 8,
+        height: 56,
+    },
+    outlineButtonText: {
+        color: Colors.primary,
+        fontWeight: "bold",
+        fontSize: 16,
     },
 });
 

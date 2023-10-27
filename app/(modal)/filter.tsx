@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Colors from "../../constants/Colors";
 import {useNavigation} from "expo-router";
 import {categories} from "../../assets/data/home";

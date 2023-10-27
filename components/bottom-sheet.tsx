@@ -1,6 +1,6 @@
 import React, {forwardRef, useCallback, useMemo} from 'react';
-import {BottomSheetBackdrop, BottomSheetModal, useBottomSheet, useBottomSheetModal} from "@gorhom/bottom-sheet";
-import { Button, Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {BottomSheetBackdrop, BottomSheetModal, useBottomSheetModal} from "@gorhom/bottom-sheet";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import Colors from "../constants/Colors";
 import {Link} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";

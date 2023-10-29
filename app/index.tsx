@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from "react-native";
+import {SafeAreaView, ScrollView, StyleSheet, Text} from "react-native";
 import Categories from "../components/categories";
 import Restaurants from "../components/restaurants";
 import Colors from "../constants/Colors";

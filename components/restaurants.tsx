@@ -8,7 +8,7 @@ const Restaurants = () => {
     return (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ padding: 15 }}>
             { restaurants.map((restaurant, index) => (
-                <Link href={'/'} key={index} asChild>
+                <Link href={'/details'} key={index} asChild>
                     <TouchableOpacity>
                         <View style={styles.categoryCard}>
                             <Image style={styles.image } source={restaurant.img} />

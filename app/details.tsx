@@ -1,8 +1,8 @@
 import React, {useLayoutEffect} from 'react';
-import {Image, SectionList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, ListRenderItem, SectionList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Colors from "../constants/Colors";
 import { restaurant } from "../assets/data/restaurant";
-import {useNavigation} from "expo-router";
+import {Link, useNavigation} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
 
 const ParallaxScrollView = require('../components/ParallaxScrollView');
@@ -40,6 +40,19 @@ const Details = () => {
         })
     }, []);
 
+    const renderItem: ListRenderItem<any> = ({ item, index }) => (
+        <Link href={'/'} asChild>
+            <TouchableOpacity style={styles.item}>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.dish}>{ item.name }</Text>
+                    <Text style={styles.dishText}>{ item.info }</Text>
+                    <Text style={styles.dishText}>${ item.price }</Text>
+                </View>
+                <Image source={item.img} style={styles.dishImage} />
+            </TouchableOpacity>
+        </Link>
+    )
+
     return (
         <>
             <ParallaxScrollView backgroundColor={"#fff"}
@@ -71,13 +84,9 @@ const Details = () => {
                         scrollEnabled={false}
                         sections={DATA}
                         keyExtractor={(item, index) => `${item.id + index}`}
-                        renderItem={({ item, index }) => (
-                        <Text>
-                            { item.name }
-                        </Text>
-                    )}
+                        renderItem={renderItem}
                         ItemSeparatorComponent={() => (
-                            <View style={{ height: 1, backgroundColor: Colors.grey }}></View>
+                            <View style={{ marginHorizontal: 16, height: 1, backgroundColor: Colors.grey }}></View>
                         )}
                         SectionSeparatorComponent={() => (
                             <View style={{ height: 1, backgroundColor: Colors.grey }}></View>
@@ -137,7 +146,26 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginTop: 40,
         margin: 16,
-    }
+    },
+    item: {
+        backgroundColor: "#fff",
+        padding: 16,
+        flexDirection: "row",
+    },
+    dishImage: {
+        height: 80,
+        width: 80,
+        borderRadius: 4,
+    },
+    dish: {
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    dishText: {
+        fontSize: 14,
+        color: Colors.mediumDark,
+        paddingHorizontal: 4,
+    },
 });
 
 export default Details;

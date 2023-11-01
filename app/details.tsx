@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 import {Image, ListRenderItem, ScrollView, SectionList, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Colors from "../constants/Colors";
 import { restaurant } from "../assets/data/restaurant";
@@ -17,6 +17,9 @@ const Details = () => {
     const animatedStyles = useAnimatedStyle(() => ({
         opacity: opacity.value,
     }));
+
+    const scrollRef = useRef<ScrollView>(null);
+    const itemsRef = useRef<TouchableOpacity[]>([]);
 
     const DATA =  restaurant.food.map((item, index) => ({
        title: item.category,
@@ -49,7 +52,12 @@ const Details = () => {
     }, []);
 
     const selectCategory = (index: number) => {
+        const selected = itemsRef.current[index];
         setActiveIndex(index);
+
+        selected.measure((x) => {
+            scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true});
+        });
     }
 
     const onScroll = (event: any) => {
@@ -124,9 +132,9 @@ const Details = () => {
 
             <AnimatedView style={[styles.stickySegments, animatedStyles]}>
                 <View style={styles.segmentsShadow}>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.segmentScrollView}>
+                    <ScrollView ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.segmentScrollView}>
                         { restaurant.food.map((item, index) => (
-                            <TouchableOpacity key={index} style={activeIndex === index ? styles.segmentButtonActive : styles.segmentButton} onPress={() => selectCategory(index)}>
+                            <TouchableOpacity ref={(ref) => itemsRef.current[index] = ref!} key={index} style={activeIndex === index ? styles.segmentButtonActive : styles.segmentButton} onPress={() => selectCategory(index)}>
                                 <Text style={activeIndex === index ? styles.segmentTextActive : styles.segmentText}>{ item.category }</Text>
                             </TouchableOpacity>
                         )) }

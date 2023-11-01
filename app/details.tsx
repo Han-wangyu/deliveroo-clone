@@ -5,12 +5,18 @@ import { restaurant } from "../assets/data/restaurant";
 import {Link, useNavigation} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
 import AnimatedView from "react-native-reanimated/src/reanimated2/component/View";
+import {useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
 
 const ParallaxScrollView = require('../components/ParallaxScrollView');
 
 const Details = () => {
     const navigation = useNavigation();
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const opacity = useSharedValue(0);
+    const animatedStyles = useAnimatedStyle(() => ({
+        opacity: opacity.value,
+    }));
 
     const DATA =  restaurant.food.map((item, index) => ({
        title: item.category,
@@ -46,6 +52,15 @@ const Details = () => {
         setActiveIndex(index);
     }
 
+    const onScroll = (event: any) => {
+        const y = event.nativeEvent.contentOffset.y;
+        if (y > 350) {
+            opacity.value = withTiming(1);
+        } else {
+            opacity.value = withTiming(0);
+        }
+    }
+
     const renderItem: ListRenderItem<any> = ({ item, index }) => (
         <Link href={'/'} asChild>
             <TouchableOpacity style={styles.item}>
@@ -62,6 +77,7 @@ const Details = () => {
     return (
         <>
             <ParallaxScrollView backgroundColor={"#fff"}
+                                scrollEvent={onScroll}
                                 parallaxHeaderHeight={250}
                                 stickyHeaderHeight={70}
                                 style={{ flex: 1 }}
@@ -106,7 +122,7 @@ const Details = () => {
                 </View>
             </ParallaxScrollView>
 
-            <AnimatedView style={[styles.stickySegments]}>
+            <AnimatedView style={[styles.stickySegments, animatedStyles]}>
                 <View style={styles.segmentsShadow}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.segmentScrollView}>
                         { restaurant.food.map((item, index) => (

@@ -70,7 +70,7 @@ const Details = () => {
     }
 
     const renderItem: ListRenderItem<any> = ({ item, index }) => (
-        <Link href={'/'} asChild>
+        <Link href={'/(modal)/dish'} asChild>
             <TouchableOpacity style={styles.item}>
                 <View style={{ flex: 1 }}>
                     <Text style={styles.dish}>{ item.name }</Text>

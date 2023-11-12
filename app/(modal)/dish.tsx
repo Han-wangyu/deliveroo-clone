@@ -4,6 +4,9 @@ import {useLocalSearchParams} from "expo-router";
 import {getDishById} from "../../assets/data/restaurant";
 import Colors from "../../constants/Colors";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AnimatedImage from "react-native-reanimated/src/reanimated2/component/Image";
+import {FadeIn, FadeInLeft} from "react-native-reanimated";
+import AnimatedText from "react-native-reanimated/src/reanimated2/component/Text";
 
 const Dish = () => {
     const { id } = useLocalSearchParams();
@@ -16,14 +19,16 @@ const Dish = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }} edges={['bottom']}>
             <View style={styles.container}>
-                <Image source ={item?.img} style={styles.image} />
+                <AnimatedImage
+                    entering={FadeIn.duration(500).delay(400) as any}
+                    source ={item?.img} style={styles.image} />
                 <View style={{ padding: 20 }}>
-                    <Text style={styles.dishName}>
+                    <AnimatedText entering={FadeInLeft.duration(400).delay(200) as any} style={styles.dishName}>
                         { item?.name }
-                    </Text>
-                    <Text style={styles.dishInfo}>
+                    </AnimatedText>
+                    <AnimatedText entering={FadeInLeft.duration(400).delay(200) as any} style={styles.dishInfo}>
                         { item?.info }
-                    </Text>
+                    </AnimatedText>
                 </View>
                 <View style={styles.footer}>
                     {/*<View style={{ flexDirection: "row", justifyContent: "center" }}>*/}
